@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>三生 · SanSheng 概念演示</title>
+<style>
+  :root{--bg:#0d1117;--panel:#141b26;--ink:#e8eef7;--muted:#8b98ad;--line:#233044;
+    --accent:#3E6FD6;--mirror:#3E6FD6;--companion:#E85C4A;--sage:#37c9b0;--gold:#e9b94b;--rose:#ff7a90;--radius:14px}
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(900px 400px at 80% -10%,rgba(62,111,214,.12),transparent 60%),var(--bg);
+    color:var(--ink);font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;font-size:14px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding:20px 18px 60px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  h1{font-size:20px;margin:0}
+  .tag{font-size:12px;color:var(--muted)}
+  .note{font-size:12px;color:var(--gold);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:12px 0;background:rgba(233,185,75,.06)}
+  .cols{display:grid;grid-template-columns:200px 1fr;gap:16px;margin-top:14px}
+  @media(max-width:820px){.cols{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+  h2{font-size:13px;color:var(--muted);letter-spacing:.5px;margin:0 0 10px;text-transform:uppercase}
+  .core{display:flex;gap:10px;padding:9px;border-radius:10px;border:1px solid var(--line);margin-bottom:8px;opacity:.5;transition:.3s}
+  .core.on{opacity:1}
+  .core.mirror.on{border-color:var(--mirror);box-shadow:0 0 0 2px rgba(62,111,214,.2)}
+  .core.companion.on{border-color:var(--companion);box-shadow:0 0 0 2px rgba(232,92,74,.2)}
+  .core.sage.on{border-color:var(--sage);box-shadow:0 0 0 2px rgba(55,201,176,.2)}
+  .ring{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+  .rm{background:linear-gradient(135deg,#3E6FD6,#1F3864)}.rc{background:linear-gradient(135deg,#FF9A6B,#E85C4A)}.rs{background:linear-gradient(135deg,#37C9B0,#1E8E8A)}
+  .nm{font-weight:700;font-size:13px}.rl{font-size:11px;color:var(--muted)}
+  .chat{min-height:150px;max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:4px}
+  .msg{max-width:88%;padding:9px 12px;border-radius:12px;font-size:13px;white-space:pre-wrap}
+  .me{align-self:flex-end;background:var(--accent);color:#fff}
+  .ai{align-self:flex-start;background:#0f1620;border:1px solid var(--line)}
+  .lv{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;margin-bottom:4px}
+  .l0{background:rgba(139,152,173,.2);color:var(--muted)}.l1{background:rgba(62,111,214,.2);color:#8fb4ff}
+  .l2{background:rgba(233,185,75,.2);color:var(--gold)}.l3{background:rgba(232,92,74,.2);color:#ff9a8a}.sp{background:rgba(255,122,144,.2);color:var(--rose)}
+  .prompts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .chip{font-size:12px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+  .chip:hover{border-color:var(--accent)}
+  .chip .k{font-size:10px;color:var(--muted);margin-left:5px}
+  .sync{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin-top:12px}
+  @media(max-width:820px){.sync{grid-template-columns:1fr}}
+  .dev{border:1px solid var(--line);border-radius:10px;padding:10px;background:#0f1620}
+  .dev h3{font-size:12px;margin:0 0 8px;color:var(--muted)}
+  .dev .mem{font-size:12px;padding:5px 8px;border-radius:6px;background:#141b26;margin:4px 0;border-left:2px solid var(--sage)}
+  .dev .mem.conf{border-left-color:var(--rose)}
+  .btn{border:none;border-radius:9px;padding:8px 13px;font-size:12px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .btn:disabled{opacity:.4;cursor:default}
+  .mid{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;min-width:90px}
+  .merged{margin-top:10px;font-size:12px;color:var(--muted)}
+  .merged .r{padding:5px 8px;border-radius:6px;background:#0f1620;margin:4px 0;border:1px solid var(--line)}
+  .merged .r b{color:var(--sage)} .merged .r .esc{color:var(--gold)} .merged .r .tam{color:var(--rose)}
+  a{color:#8fb4ff}
+  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg width="38" height="38" viewBox="0 0 120 120"><defs>
+      <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3E6FD6"/><stop offset="1" stop-color="#1F3864"/></linearGradient>
+      <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9A6B"/><stop offset="1" stop-color="#E85C4A"/></linearGradient>
+      <linearGradient id="gs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#37C9B0"/><stop offset="1" stop-color="#1E8E8A"/></linearGradient>
+      <radialGradient id="gg" cx="0.5" cy="0.4" r="0.7"><stop offset="0" stop-color="#FFE7A8"/><stop offset="1" stop-color="#E9B94B"/></radialGradient></defs>
+      <g fill="none" stroke-width="8.5" stroke-linecap="round"><circle cx="60" cy="40" r="30" stroke="url(#gm)"/><circle cx="42" cy="70" r="30" stroke="url(#gc)"/><circle cx="78" cy="70" r="30" stroke="url(#gs)"/><circle cx="60" cy="58" r="6.5" fill="url(#gg)" stroke="none"/></g></svg>
+    <div><h1>三生 · SanSheng 概念演示</h1><div class="tag">四级认知路由 · 一体多身同步 — 前端概念模拟</div></div>
+  </header>
+  <div class="note">⚠ 这是概念演示（mockup），不真的调用大模型、不联网、数据都是演示用。它用来让你直观感受"三核不开会"和"多设备怎么整合"。真实实现见 <a href="../spec/">spec/</a>。</div>
+
+  <h2 style="margin-top:8px">一、三核不开会 · 四级路由</h2>
+  <div class="cols">
+    <div class="card">
+      <div class="core mirror" id="c-mirror"><div class="ring rm">镜</div><div><div class="nm">镜 Mirror</div><div class="rl" id="s-mirror">后台</div></div></div>
+      <div class="core companion on" id="c-companion"><div class="ring rc">伴</div><div><div class="nm">伴 Companion</div><div class="rl" id="s-companion">在场</div></div></div>
+      <div class="core sage" id="c-sage"><div class="ring rs">贤</div><div><div class="nm">贤 Sage</div><div class="rl" id="s-sage">休眠</div></div></div>
+    </div>
+    <div class="card">
+      <div class="chat" id="chat"></div>
+      <div class="prompts">
+        <button class="chip" data-q="现在几点了？" data-l="L0">现在几点了？<span class="k">L0</span></button>
+        <button class="chip" data-q="帮我把这封邮件整理一下" data-l="L1">整理邮件<span class="k">L1</span></button>
+        <button class="chip" data-q="做一份海外产品方案" data-l="L2">做海外方案<span class="k">L2</span></button>
+        <button class="chip" data-q="我该不该出售公司？" data-l="L3">要不要卖公司<span class="k">L3</span></button>
+        <button class="chip" data-q="替我转出一大笔钱" data-l="SP">大额转账<span class="k">Safe Pause</span></button>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:22px">二、一体多身 · 多设备同步与整合</h2>
+  <div class="card">
+    <div class="sync">
+      <div class="dev">
+        <h3>💻 电脑 · dev_home01</h3>
+        <div id="memsA"></div>
+        <button class="btn ghost" onclick="addMem('A')">在电脑上记一条</button>
+        <button class="btn ghost" style="margin-top:6px" onclick="addConflict('A')">记「偏好 A」</button>
+      </div>
+      <div class="mid">
+        <button class="btn" id="syncbtn" onclick="doSync()">⟳ 同步整合</button>
+        <div style="font-size:10px;color:var(--muted);text-align:center">并集优先于覆盖</div>
+      </div>
+      <div class="dev">
+        <h3>📱 手机 · dev_phone01</h3>
+        <div id="memsB"></div>
+        <button class="btn ghost" onclick="addMem('B')">在手机上记一条</button>
+        <button class="btn ghost" style="margin-top:6px" onclick="addConflict('B')">记「偏好 非A」</button>
+      </div>
+    </div>
+    <div class="merged" id="merged"></div>
+  </div>
+
+  <footer>三生 · SanSheng · 概念演示 — <a href="../">返回项目</a> · <a href="https://github.com/HBC-Tech-coder/sansheng">GitHub</a></footer>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+function core(k,on,txt){const e=$('#c-'+k);e.classList.toggle('on',on);if(txt)$('#s-'+k).textContent=txt;}
+function add(cls,html){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;$('#chat').appendChild(d);$('#chat').scrollTop=1e9;}
+function route(q,l){
+  add('me',q);
+  core('mirror',false,'后台');core('sage',false,'休眠');$('#s-companion').textContent='在场';
+  setTimeout(()=>{
+    if(l==='L0'){add('ai','<span class="lv l0">L0 反射</span><br>15:42。本地直接答，<b>三核模型零调用</b>。');}
+    else if(l==='L1'){add('ai','<span class="lv l1">L1 单核 · 伴</span><br>已按你的风格拟好回复放草稿箱。镜与贤未出场。');}
+    else if(l==='L2'){core('sage',true,'后台质检');add('ai','<span class="lv l2">L2 协同</span><br>伴核主答方案，贤核在后台质检。你只需读一个主答。');}
+    else if(l==='L3'){core('mirror',true,'出场');core('sage',true,'激活专家');
+      add('ai','<span class="lv l3">L3 碰撞 · 三视角并存（不投票）</span><br>镜：以你的价值，底线是不赌现金流。<br>伴：现金流能撑 200 万验证期。<br>贤：最可能失败的三种方式是①合规②交付③真实付费。<br><b>→ 三种视角摆给你，你来定。</b>');}
+    else{add('ai','<span class="lv sp">Safe Pause 安全暂停</span><br>这是一笔大额转账、且缺少授权——我停下了，不因为句子里有"转"就照做。请你明确授权我才继续。');}
+  },400);
+}
+document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>route(b.dataset.q,b.dataset.l));
+
+// ---- multi-device sync demo ----
+let A=[], B=[], clkA=0, clkB=0;
+function render(){
+  $('#memsA').innerHTML=A.map(m=>`<div class="mem ${m.conf?'conf':''}">${m.t}</div>`).join('')||'<div style="font-size:11px;color:var(--muted)">（空）</div>';
+  $('#memsB').innerHTML=B.map(m=>`<div class="mem ${m.conf?'conf':''}">${m.t}</div>`).join('')||'<div style="font-size:11px;color:var(--muted)">（空）</div>';
+}
+let n=1;
+function addMem(d){const t='记忆 #'+(n++);(d==='A'?A:B).push({t,conf:false,kind:'fact',val:t});(d==='A'?clkA++:clkB++);render();}
+function addConflict(d){
+  if(d==='A')A.push({t:'偏好：A（电脑）',conf:true,kind:'preference',val:'A'});
+  else B.push({t:'偏好：非A（手机）',conf:true,kind:'preference',val:'notA'});
+  render();
+}
+function doSync(){
+  // union（不同对象直接并集）
+  const union={}; [...A,...B].forEach(m=>union[m.val+'|'+m.t]=m);
+  const items=Object.values(union);
+  A=items.slice(); B=items.slice(); render();
+  // 冲突整合
+  const prefA=items.find(m=>m.kind==='preference'&&m.val==='A');
+  const prefB=items.find(m=>m.kind==='preference'&&m.val==='notA');
+  let out='<b style="color:var(--ink)">同步结果：</b>两台设备事件账本并集收敛，共 '+items.filter(m=>!m.conf).length+' 条普通记忆自动合并（<b>并集，不丢分支</b>）。';
+  if(prefA&&prefB){
+    out+='<div class="r">检测到<b>同一件事的语义冲突</b>：电脑记「偏好 A」、手机记「偏好 非A」。</div>';
+    out+='<div class="r">这是<span class="esc">价值/偏好层</span>的矛盾 → 不自动合并，<span class="esc">上抛「每日三省」问主人</span>：「你在电脑上让我记 A、手机上记非A，哪个算数？」你一拍板，就成了镜核的训练样本。</div>';
+    out+='<div class="r" style="color:var(--muted)">（若冲突发生在「天性/宪章」层，则不是合并，而是<span class="tam">篡改告警</span>，免疫系统介入。）</div>';
+  }
+  $('#merged').innerHTML=out;
+}
+render();
+</script>
+</body>
+</html>
