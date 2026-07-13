@@ -33,6 +33,10 @@
   <img src="assets/architecture.png" alt="SanSheng life architecture" width="760">
 </p>
 
+<p align="center">
+  <b>▶ <a href="https://hbc-tech-coder.github.io/sansheng/">Live concept demo</a></b> — click through "the three cores don't hold meetings" and "how devices merge" (a mockup)
+</p>
+
 ---
 
 ## What we are building

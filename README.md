@@ -33,6 +33,10 @@
   <img src="assets/architecture.png" alt="三生生命架构" width="760">
 </p>
 
+<p align="center">
+  <b>▶ <a href="https://hbc-tech-coder.github.io/sansheng/">在线概念演示</a></b> — 亲手点一点"三核不开会"和"多设备怎么整合"（概念模拟）
+</p>
+
 ---
 
 ## 我们在造什么
