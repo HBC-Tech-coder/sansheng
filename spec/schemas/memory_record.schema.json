@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sansheng.dev/spec/memory_record.schema.json",
+  "title": "记忆记录 MemoryRecord v0.1",
+  "description": "可追溯长期记忆。事实/推断/想象永不混淆；纠错走 supersedes 链；隐私永不入种群（SPEC/memory_record.md）。",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "pattern": "^mem_[a-z0-9][a-z0-9_-]{0,63}$" },
+    "life_id": { "$ref": "common_defs.schema.json#/$defs/LifeId" },
+    "truth_state": { "$ref": "common_defs.schema.json#/$defs/TruthState" },
+    "content": { "type": "string", "minLength": 1 },
+    "source_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "来源 LifeEvent / 文件 / 对话 id——每条长期记忆必须可溯源"
+    },
+    "evidence_hash": { "$ref": "common_defs.schema.json#/$defs/Hash" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "scope": { "type": "string", "description": "适用范围：global / project:x / relation:x ..." },
+    "retention": { "$ref": "common_defs.schema.json#/$defs/Retention" },
+    "consent": {
+      "type": "object",
+      "properties": {
+        "readable_by": { "type": "array", "items": { "type": "string" } },
+        "population_share": { "const": false, "description": "隐私记忆永不入种群——常量 false，不可放开" }
+      },
+      "required": ["population_share"],
+      "additionalProperties": false
+    },
+    "authorized_cores": {
+      "type": "array",
+      "items": { "$ref": "common_defs.schema.json#/$defs/CoreId" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "supersedes": { "type": "string", "pattern": "^mem_[a-z0-9][a-z0-9_-]{0,63}$" },
+    "model_version": { "type": "string", "description": "写入时底层模型（换脑追溯）" },
+    "vector_clock": { "$ref": "common_defs.schema.json#/$defs/VectorClock" },
+    "device_id": { "$ref": "common_defs.schema.json#/$defs/DeviceId" },
+    "created_at": { "$ref": "common_defs.schema.json#/$defs/Timestamp" },
+    "updated_at": { "$ref": "common_defs.schema.json#/$defs/Timestamp" },
+    "signature": { "type": "string" }
+  },
+  "required": ["id", "life_id", "truth_state", "content", "source_ids", "confidence", "scope", "retention", "consent", "authorized_cores", "created_at"],
+  "additionalProperties": false
+}

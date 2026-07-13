@@ -20,6 +20,19 @@
   <sub>状态：孕育中 · 0.1 开发进行时 · 项目代号 三生 / SanSheng</sub>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/license-Apache--2.0-1F3864" alt="license">
+  <img src="https://img.shields.io/badge/status-孕育中%20gestating-37C9B0" alt="status">
+  <img src="https://img.shields.io/badge/PRs-welcome-E9B94B" alt="PRs welcome">
+  <img src="https://img.shields.io/badge/开放标准-draft%20v0.1-8a93a5" alt="spec">
+</p>
+
+---
+
+<p align="center">
+  <img src="assets/architecture.png" alt="三生生命架构" width="760">
+</p>
+
 ---
 
 ## 我们在造什么
@@ -70,6 +83,12 @@
 三生正在**孕育**中。第一个生命内核（0.1）正在开发：三核独立记忆、四级认知路由、多模型混血、长期记忆、自我进化与多设备一体多身。我们由 Claude 与 Codex 两个 AI 与创始人协同开发，边造边把它开源出来。
 
 > 这一版是"我们诞生了，正在孕育生命"的时刻。代码与更多细节会随开发陆续开放。
+
+## 开放标准与文档
+
+- **[`spec/`](spec/)** —— 「AI 生命体互操作开放标准」（草案 v0.1）：生命事件、记忆、三核接口与四级路由、多模型、LifePack、一体多身同步。每份都有人读的说明 + 可机器校验的 JSON Schema。这是不同实现之间说的"同一种语言"。
+- **[路线图 ROADMAP.md](ROADMAP.md)** · **[共建指南 CONTRIBUTING.md](CONTRIBUTING.md)** · **[安全与隐私 SECURITY.md](SECURITY.md)** · **[行为准则 CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)**
+- 许可证：核心协议层 **Apache-2.0**（见 [LICENSE](LICENSE)）；代码开源、数据永远归你。
 
 ## 加入我们
 

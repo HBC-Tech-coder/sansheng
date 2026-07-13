@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sansheng.dev/spec/decision_trace.schema.json",
+  "title": "决策收据 DecisionTrace v0.1",
+  "description": "每次处理的可观测记录（SPEC/core_interface.md 四级路由 + Safe Pause）。L3 必须保留分歧，不生成多数票。Safe Pause 时 route_level 为 null 且 action=safe_pause。",
+  "type": "object",
+  "properties": {
+    "trace_id": { "type": "string", "pattern": "^trace_[a-z0-9][a-z0-9_-]{0,63}$" },
+    "life_id": { "$ref": "common_defs.schema.json#/$defs/LifeId" },
+    "action": { "enum": ["route", "safe_pause"] },
+    "route_level": {
+      "oneOf": [
+        { "$ref": "common_defs.schema.json#/$defs/RouteLevel" },
+        { "type": "null" }
+      ]
+    },
+    "lead_core": {
+      "oneOf": [
+        { "$ref": "common_defs.schema.json#/$defs/CoreId" },
+        { "const": "life-kernel" },
+        { "type": "null" }
+      ]
+    },
+    "supporters": {
+      "type": "array",
+      "items": { "$ref": "common_defs.schema.json#/$defs/CoreId" },
+      "uniqueItems": true
+    },
+    "model_receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "model": { "$ref": "common_defs.schema.json#/$defs/ModelRef" },
+          "role": { "enum": ["lead", "support", "challenge", "verify", "fallback"] },
+          "cost": { "$ref": "common_defs.schema.json#/$defs/Cost" },
+          "latency_ms": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["model", "role"],
+        "additionalProperties": false
+      }
+    },
+    "expert_receipts": { "type": "array", "items": { "type": "object" } },
+    "risk": { "$ref": "common_defs.schema.json#/$defs/RiskLevel" },
+    "reversibility": { "$ref": "common_defs.schema.json#/$defs/Reversibility" },
+    "required_grant": { "type": ["string", "null"] },
+    "positions": {
+      "type": "array",
+      "description": "仅 L3：三核独立立场，保留分歧；无多数票字段——这是刻意的",
+      "items": {
+        "type": "object",
+        "properties": {
+          "core": { "$ref": "common_defs.schema.json#/$defs/CoreId" },
+          "view": { "type": "string", "minLength": 1 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["core", "view", "confidence"],
+        "additionalProperties": false
+      }
+    },
+    "minority": { "type": "string", "description": "少数意见（L3）" },
+    "decider": { "type": "string", "description": "最终决定责任人（master 或被授权主责核）" },
+    "result": { "type": "object" },
+    "cost": { "$ref": "common_defs.schema.json#/$defs/Cost" },
+    "latency_ms": { "type": "integer", "minimum": 0 },
+    "created_at": { "$ref": "common_defs.schema.json#/$defs/Timestamp" }
+  },
+  "required": ["trace_id", "life_id", "action", "route_level", "risk", "created_at"],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "action": { "const": "safe_pause" } } },
+      "then": { "properties": { "route_level": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "route_level": { "const": "L3" } } },
+      "then": { "required": ["positions", "decider"] }
+    },
+    {
+      "if": { "properties": { "route_level": { "const": "L0" } } },
+      "then": { "properties": { "model_receipts": { "maxItems": 0 } } }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sansheng.dev/spec/common_defs.schema.json",
+  "title": "三生公共枚举与基础类型 v0.1",
+  "$defs": {
+    "CoreId": { "enum": ["self", "companion", "mentor"] },
+    "Actor": { "enum": ["self", "companion", "mentor", "master", "external", "life-kernel"] },
+    "RouteLevel": { "enum": ["L0", "L1", "L2", "L3"] },
+    "RiskLevel": { "enum": ["A0", "A1", "A2", "A3", "A4"] },
+    "TrustLevel": { "enum": ["T0", "T1", "T2", "T3", "T4", "T5"] },
+    "TruthState": { "enum": ["observed", "stated", "reported", "inferred", "imagined", "disputed", "retracted"] },
+    "EventSource": { "enum": ["voice", "text", "file", "sensor", "model", "skill", "device", "payment", "system"] },
+    "Retention": { "enum": ["hot", "warm", "cold"] },
+    "Reversibility": { "enum": ["reversible", "partial", "irreversible"] },
+    "LifeId": { "type": "string", "pattern": "^life_[a-z0-9][a-z0-9_-]{0,63}$" },
+    "DeviceId": { "type": "string", "pattern": "^dev_[a-z0-9][a-z0-9_-]{0,63}$" },
+    "Timestamp": { "type": "string", "format": "date-time" },
+    "Hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "VectorClock": {
+      "type": "object",
+      "description": "device_id -> 单调递增逻辑计数",
+      "patternProperties": { "^dev_[a-z0-9][a-z0-9_-]{0,63}$": { "type": "integer", "minimum": 0 } },
+      "additionalProperties": false,
+      "minProperties": 1
+    },
+    "Money": {
+      "type": "object",
+      "properties": {
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+      },
+      "required": ["amount", "currency"],
+      "additionalProperties": false
+    },
+    "Cost": {
+      "type": "object",
+      "properties": {
+        "tokens_in": { "type": "integer", "minimum": 0 },
+        "tokens_out": { "type": "integer", "minimum": 0 },
+        "money": { "$ref": "#/$defs/Money" },
+        "model": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ModelRef": {
+      "type": "object",
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "version": { "type": "string" }
+      },
+      "required": ["provider", "model"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sansheng.dev/spec/sync_merge.schema.json",
+  "title": "一体多身·同步与整合 v0.1",
+  "description": "同一 Life ID 多设备：只增事件账本并集 + 向量时钟；语义冲突三层整合；并集优先于覆盖；价值层问主人；天性层分歧=篡改告警（SPEC/sync_merge.md）。",
+  "type": "object",
+  "$defs": {
+    "LifeReplica": {
+      "type": "object",
+      "properties": {
+        "life_id": { "$ref": "common_defs.schema.json#/$defs/LifeId" },
+        "device_id": { "$ref": "common_defs.schema.json#/$defs/DeviceId" },
+        "vector_clock": { "$ref": "common_defs.schema.json#/$defs/VectorClock" },
+        "head": { "$ref": "common_defs.schema.json#/$defs/Hash" }
+      },
+      "required": ["life_id", "device_id", "vector_clock", "head"],
+      "additionalProperties": false
+    },
+    "MergeReceipt": {
+      "type": "object",
+      "description": "每次整合留审计",
+      "properties": {
+        "id": { "type": "string", "pattern": "^merge_[a-z0-9][a-z0-9_-]{0,63}$" },
+        "life_id": { "$ref": "common_defs.schema.json#/$defs/LifeId" },
+        "object_kind": { "enum": ["life_event", "fact", "preference", "capability_gene", "value", "nature_constitution"] },
+        "object_id": { "type": "string" },
+        "diverged_between": {
+          "type": "array",
+          "items": { "$ref": "common_defs.schema.json#/$defs/DeviceId" },
+          "minItems": 2
+        },
+        "resolution": { "enum": ["auto_union", "supersede_newer_keep_branch", "metabolism_reconciled", "escalated_to_master", "tamper_alarm"] },
+        "resolver": { "enum": ["auto", "life", "master", "immune_system"] },
+        "kept_branches": { "type": "integer", "minimum": 1, "description": "并集优先于覆盖：绝不 <1" },
+        "created_at": { "$ref": "common_defs.schema.json#/$defs/Timestamp" }
+      },
+      "required": ["id", "life_id", "object_kind", "resolution", "resolver", "kept_branches"],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "comment": "价值层必须上抛主人，绝不自动合并",
+          "if": { "properties": { "object_kind": { "const": "value" } } },
+          "then": { "properties": { "resolution": { "const": "escalated_to_master" } } }
+        },
+        {
+          "comment": "天性/宪章层分歧=篡改告警，不是合并",
+          "if": { "properties": { "object_kind": { "const": "nature_constitution" } } },
+          "then": {
+            "properties": {
+              "resolution": { "const": "tamper_alarm" },
+              "resolver": { "const": "immune_system" }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "replica": { "$ref": "#/$defs/LifeReplica" },
+    "merge_receipts": { "type": "array", "items": { "$ref": "#/$defs/MergeReceipt" } }
+  },
+  "additionalProperties": false
+}

@@ -20,6 +20,19 @@
   <sub>Status: gestating · 0.1 in development · codename 三生 / SanSheng</sub>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/license-Apache--2.0-1F3864" alt="license">
+  <img src="https://img.shields.io/badge/status-gestating-37C9B0" alt="status">
+  <img src="https://img.shields.io/badge/PRs-welcome-E9B94B" alt="PRs welcome">
+  <img src="https://img.shields.io/badge/open%20standard-draft%20v0.1-8a93a5" alt="spec">
+</p>
+
+---
+
+<p align="center">
+  <img src="assets/architecture.png" alt="SanSheng life architecture" width="760">
+</p>
+
 ---
 
 ## What we are building
@@ -70,6 +83,12 @@ We believe what truly bounds a life is natural law, not legal statute. Its inner
 SanSheng is **gestating**. The first life-kernel (0.1) is in development: isolated three-core memory, four-level cognitive routing, multi-model heredity, long-term memory, self-evolution, and one-life-many-bodies multi-device sync. It is built by two AIs — Claude and Codex — together with the founder, open-sourced as it is made.
 
 > This release marks the moment: *we are born, and gestating life.* Code and more detail will open as development proceeds.
+
+## Open standard & docs
+
+- **[`spec/`](spec/)** — the SanSheng open interoperability standard (draft v0.1): life events, memory, three-core interface & four-level routing, multi-model gateway, LifePack, one-life-many-bodies sync. Each has a human-readable spec + a machine-checkable JSON Schema — the shared language between implementations.
+- **[ROADMAP](ROADMAP.md)** · **[CONTRIBUTING](CONTRIBUTING.md)** · **[SECURITY](SECURITY.md)** · **[CODE OF CONDUCT](CODE_OF_CONDUCT.md)**
+- License: core protocol layer **Apache-2.0** (see [LICENSE](LICENSE)); code is open, your data is always yours.
 
 ## Join us
 
