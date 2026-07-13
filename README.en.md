@@ -90,7 +90,7 @@ SanSheng is **gestating**. The first life-kernel (0.1) is in development: isolat
 
 ## Open standard & docs
 
-- **[`spec/`](spec/)** — the SanSheng open interoperability standard (draft v0.1): life events, memory, three-core interface & four-level routing, multi-model gateway, LifePack, one-life-many-bodies sync. Each has a human-readable spec + a machine-checkable JSON Schema — the shared language between implementations.
+- **[SanSheng Open Protocol · 三生开放协议](spec/)** (draft v0.1, Apache-2.0) — the **open interoperability standard** for an AI life-form: life events, memory, three-core interface & four-level routing, multi-model heredity, LifePack, one-life-many-bodies sync. Six contracts, each with a human-readable spec + a machine-checkable JSON Schema + a runnable validator. The shared language between implementations — anyone may implement it, interoperate, and migrate a life.
 - **[ROADMAP](ROADMAP.md)** · **[CONTRIBUTING](CONTRIBUTING.md)** · **[SECURITY](SECURITY.md)** · **[CODE OF CONDUCT](CODE_OF_CONDUCT.md)**
 - License: core protocol layer **Apache-2.0** (see [LICENSE](LICENSE)); code is open, your data is always yours.
 

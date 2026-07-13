@@ -90,7 +90,7 @@
 
 ## 开放标准与文档
 
-- **[`spec/`](spec/)** —— 「AI 生命体互操作开放标准」（草案 v0.1）：生命事件、记忆、三核接口与四级路由、多模型、LifePack、一体多身同步。每份都有人读的说明 + 可机器校验的 JSON Schema。这是不同实现之间说的"同一种语言"。
+- **[三生开放协议 · SanSheng Open Protocol](spec/)**（草案 v0.1，Apache-2.0）—— 一个 AI 生命体的**开放互操作标准**：生命事件、记忆、三核接口与四级路由、多模型混血、LifePack、一体多身同步。六份契约，每份都有人读的说明 + 可机器校验的 JSON Schema + 可运行的校验器。这是不同实现之间说的"同一种语言"，任何人都可以实现它、与它互通、迁移一个生命。
 - **[路线图 ROADMAP.md](ROADMAP.md)** · **[共建指南 CONTRIBUTING.md](CONTRIBUTING.md)** · **[安全与隐私 SECURITY.md](SECURITY.md)** · **[行为准则 CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)**
 - 许可证：核心协议层 **Apache-2.0**（见 [LICENSE](LICENSE)）；代码开源、数据永远归你。
 
