@@ -1,67 +1,57 @@
 # SanSheng Open Protocol · 三生开放协议
 
-> **Version v0.1 (draft)** · License **Apache-2.0** · Status: gestating, may change before freeze
+> **Version v0.1 (frozen)** · License **Apache-2.0** · Contract index [registry.json](registry.json) (registry 0.1.0, 10 contracts)
 > [简体中文](README.md)
 
 **In one line: the shared language between different digital-life implementations.**
 
-The SanSheng Open Protocol defines the skeletal data and interfaces of an AI life-form — life events, memory, how the three cores cooperate, how a life inherits from multiple models, how it is packaged and migrated, and how it stays "the same it" across many devices. It is an **open standard**: anyone may implement it, interoperate with it, and migrate a life from one implementation to another.
+The SanSheng Open Protocol defines the skeletal data and interfaces of an AI life-form — identity, life events, memory, how the three cores cooperate, how it inherits from multiple models, how external actions are executed, how it is packaged and migrated, how it stays "the same it" across devices, and how it evolves and reproduces. It is an **open standard**: anyone may implement it, interoperate with it, and migrate a life from one implementation to another.
 
 ## Why an open standard
+A life meant to last a century, across dozens of model generations and many devices, possibly implemented by different teams, **must not be locked into anyone's proprietary format**. Whoever defines the format is the gravitational center of the ecosystem — we choose to keep that center **open**.
 
-A life meant to last a century — across dozens of model generations, many devices, and possibly many implementations — **must not be locked into any single vendor's proprietary format**. Whoever defines the format is the gravitational center of the ecosystem; we choose to make that center **open** rather than own it. With shared contracts, different teams — even different AIs — can each implement in their own way, yet still swap parts and carry the same life between them.
+## The ten contracts (8 P0 + 2 P1)
+The machine-readable [registry.json](registry.json) is authoritative (registry 0.1.0, status `frozen`). Four orthogonal axes: cognitive routing **L0–L3**, trust **T0–T5**, action risk **A0–A4**, evolution level **E0–E4** (they do not map onto each other).
 
-## The six contracts
-
-| # | Contract | Defines | Doc | Schema |
+| # | Contract | What it defines | Schema | Tier |
 |---|---|---|---|---|
-| 1 | **LifeEvent** | The smallest unit of existence (append-only ledger, bi-temporal, vector clock) | [life_event.md](life_event.md) | [schema](schemas/life_event.schema.json) |
-| 2 | **MemoryRecord** | Traceable; fact/inference/imagination never conflated; correction via supersedes; privacy never enters the population | [memory_record.md](memory_record.md) | [schema](schemas/memory_record.schema.json) |
-| 3 | Three cores & **four-level routing** | No voting, no meetings; L0-L3 + Safe Pause; DecisionTrace | [core_interface.md](core_interface.md) | [schema](schemas/decision_trace.schema.json) |
-| 4 | Multi-model **heredity gateway** | Multi-parent inheritance, brain-swap, cross-border gate | [model_gateway.md](model_gateway.md) | [schema](schemas/model_gateway.schema.json) |
-| 5 | **LifePack** | Migration / recovery / inheritance; genome never in the main pack | [lifepack.md](lifepack.md) | [schema](schemas/lifepack.schema.json) |
-| 6 | One-life-many-bodies **sync & merge** | Multi-device union + vector clocks; three-tier conflict resolution | [sync_merge.md](sync_merge.md) | [schema](schemas/sync_merge.schema.json) |
+| 1 | **LifeIdentity** | Root identity + continuous lineage; three cores self/companion/mentor; per-device revocable certificates | [schema](schemas/life-identity.schema.json) | P0 |
+| 2 | **LifeEvent** | The smallest unit of existence: append-only ledger, bitemporal, vector clock, hash chain | [schema](schemas/life-event.schema.json) | P0 |
+| 3 | **MemoryRecord** | Traceable; fact/inference/imagination never conflated; correction via supersedes; private data requires consent | [schema](schemas/memory-record.schema.json) | P0 |
+| 4 | **DecisionTrace** | Four-level cognitive routing L0–L3 + Safe Pause; no voting, no meetings | [schema](schemas/decision-trace.schema.json) | P0 |
+| 5 | **ModelCall** | Multi-model heredity; planned→terminal accounting; failure receipts carry no sensitive data | [schema](schemas/model-call.schema.json) | P0 |
+| 6 | **ActionIntent** | External actions become intents first, executed by a gateway only after authorization/risk/budget/reversibility checks; deny on unknown | [schema](schemas/action-intent.schema.json) | P0 |
+| 7 | **LifePackManifest** | Migration/recovery/inheritance; raw_genome never in the main pack; private/restricted entries must be encrypted | [schema](schemas/lifepack-manifest.schema.json) | P0 |
+| 8 | **SyncEnvelope** | One-life-many-bodies: event union + vector clock; three-tier semantic conflict resolution | [schema](schemas/sync-envelope.schema.json) | P0 |
+| 9 | **EvolutionCapsule** | Population propagation: `public` only + privacy scan passed + signed + revocable | [schema](schemas/evolution-capsule.schema.json) | P1 |
+| 10 | **BirthManifest** | Offspring gets a new identity; five domains excluded (private-memory/accounts/wallets/device-permissions/genome) | [schema](schemas/birth-manifest.schema.json) | P1 |
 
-Shared enums and base types are in [common_defs](schemas/common_defs.schema.json): CoreId (self/companion/mentor), routing L0-L3, risk A0-A4, trust T0-T5, truth-state, vector clock, etc.
+Shared enums and base types: [common-defs](schemas/common-defs.schema.json).
 
-## Three non-negotiable principles (every implementation must uphold)
-
-An implementation only earns the name "SanSheng" if it holds these three:
-
-1. **Data belongs to the master; privacy never enters the population.** Only de-identified methods/capability-genes propagate across the population; any propagation of private data is rejected at the protocol layer (`memory_record`'s `consent.population_share` is always `false`).
-2. **No impersonation.** Fact, inference and imagination are never conflated in `truth_state`; no impersonating real people, no fabricated memories.
-3. **Terminable.** The nature/constitution layer cannot be dissolved by "evolution"; the final touch on any money transfer is always human; every external action is pausable, reversible, auditable.
+## Three non-negotiable principles (every implementation must hold)
+1. **Data belongs to the owner; privacy never enters the population.** Only de-identified, signed capability genes propagate; at the protocol layer `EvolutionCapsule` accepts only `data_classification=public` — internal/private/restricted are machine-rejected.
+2. **No impersonation.** Fact, inference, and imagination are never conflated in `truth_state`; no impersonating real people, no fabricated memories.
+3. **Can be terminated.** The nature/constitution layer cannot be dissolved by "evolution"; every external action becomes an `ActionIntent` that is pausable, reversible, auditable; the final say over funds always belongs to a human.
 
 ## Conformance
+An implementation claiming compatibility must: ① pass `schemas/` validation; ② hold the three principles; ③ satisfy these **key invariants**:
+- "what time is it" routes to **L0** with **zero model calls**;
+- no core reads another core's private memory, and audits carry no private content;
+- high-risk irreversible actions (A3/A4) enter **Safe Pause** or require authorization; client-claimed authorization booleans / fake grants are **invalid**;
+- `EvolutionCapsule` propagates only when `public`; `raw_genome` never in the LifePack main pack; `private/restricted` entries encrypted;
+- offspring excludes the five domains; L3 keeps three perspectives and minority views — **no majority vote**.
 
-To claim SanSheng-compatibility, an implementation must at least:
-
-- pass validation against the `schemas/` in this directory;
-- uphold the three principles above;
-- satisfy these **key invariants** (which are also our own acceptance tests):
-  - "what time is it" routes to L0 with **zero core-model calls**;
-  - no core may read another core's private namespace;
-  - high-risk irreversible actions (A3/A4) enter **Safe Pause** or require **authorization**, and are not grabbed by L0 just because the sentence contains "now";
-  - memory `population_share` is always `false`; the genome is never in the LifePack main pack;
-  - L3 preserves three positions and minority views — it **never produces a majority vote**.
-
-## Validate it yourself
-
+## Validate it yourself (runnable)
 ```bash
-# needs python + jsonschema + referencing
 pip install jsonschema referencing
 python schemas/validate_contracts.py
 ```
-
-It runs valid/invalid samples against each schema. **21/21 pass = your data is conformant**, and 8 intentionally-broken samples (privacy trying to enter the population, nature trying to be altered, genome in the main pack, L0 calling a model, L3 missing three positions…) are all rejected as expected — that is what "a standard that stops errors" means.
+Runs positive/negative samples over the red lines: **20/20 pass**, and it **rejects 14 deliberately-wrong samples as expected** (privacy trying to enter the population, genome in the main pack, unencrypted private, missing consent, offspring missing an excluded domain…). That is what "the standard can block mistakes" means.
 
 ## Versioning & governance
-
-- Currently **v0.1 draft**; it will change before freeze, but the direction is stable.
-- **Feedback:** open an [Issue](../../issues) (`spec` label) or join [Discussions](../../discussions).
-- **Changes go through ADRs:** append via supersedes, never silently rewrite history.
-- After freeze it evolves by semantic versioning; breaking changes ship with migration tools and notes.
+- **v0.1 (frozen)**: field-level contracts are frozen; breaking changes go through a new ADR + migration tooling, evolving by semantic versioning.
+- **Feedback**: open an [Issue](../../issues) (`spec` label) or join [Discussions](../../discussions).
+- Changes go through ADRs — appended via supersedes, never silently rewriting history.
 
 ## License
-
-This protocol (docs and JSON Schemas) is open under **Apache-2.0** — free to implement, free to distribute. **What is open is the protocol, not anyone's life** — code and formats are open source; a user's memories, privacy and genome always belong to the user.
+This protocol (documentation and JSON Schema) is open under **Apache-2.0**. **What is open is the protocol, not anyone's life** — the protocol and formats are open; a user's memory, privacy, and genome always belong to the user.

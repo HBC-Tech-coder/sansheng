@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/life-identity.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "life_id", "created_at", "status", "root_public_key", "cores", "device_certificates"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "created_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" },
+    "status": { "enum": ["embryo", "active", "paused", "sealed", "terminated"] },
+    "parent_life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "root_public_key": { "type": "string", "minLength": 16 },
+    "cores": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/CoreId" }
+    },
+    "device_certificates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["device_id", "public_key", "status", "issued_at"],
+        "properties": {
+          "device_id": { "type": "string", "minLength": 1 },
+          "public_key": { "type": "string", "minLength": 16 },
+          "status": { "enum": ["active", "revoked"] },
+          "issued_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" },
+          "revoked_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" }
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/life-event.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "life_id", "event_time", "record_time", "device_id", "device_seq", "vector_clock", "content_hash", "source", "actor", "trust_level", "action_risk", "data_classification", "content"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "event_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "event_time": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" },
+    "record_time": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" },
+    "device_id": { "type": "string", "minLength": 1 },
+    "device_seq": { "type": "integer", "minimum": 0 },
+    "vector_clock": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/VectorClock" },
+    "content_hash": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Sha256" },
+    "previous_hashes": { "type": "array", "items": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Sha256" }, "uniqueItems": true },
+    "source": { "enum": ["voice", "text", "file", "sensor", "model", "skill", "device", "payment", "system"] },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["owner", "core", "system", "device", "model", "skill", "external"] },
+        "core_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/CoreId" },
+        "actor_id": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "core" } } },
+          "then": {
+            "properties": { "core_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/CoreId" } },
+            "required": ["core_id"]
+          }
+        }
+      ]
+    },
+    "trust_level": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/TrustLevel" },
+    "action_risk": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/ActionRisk" },
+    "data_classification": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/DataClassification" },
+    "consent_id": { "type": "string", "minLength": 1 },
+    "trace_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "content": { "type": "object" },
+    "cost": { "type": "object" },
+    "result": { "type": "object" },
+    "signature": { "type": "string", "minLength": 16 }
+  }
+}

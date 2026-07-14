@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/lifepack-manifest.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "lifepack_id", "life_id", "created_at", "format_version", "excluded_content", "entries", "root_hash", "signature", "key_envelopes"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "lifepack_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "created_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" },
+    "format_version": { "const": "0.1.0" },
+    "excluded_content": {
+      "type": "array",
+      "const": ["raw_genome"]
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "entry_kind", "sha256", "bytes", "classification", "encrypted"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^(identity|constitution|events|memories|evidence|genes|models|relationships|bodies|recovery)/" },
+          "entry_kind": {
+            "enum": ["identity", "constitution", "event", "memory", "evidence", "capability_gene", "model_profile", "relationship", "body_profile", "recovery"]
+          },
+          "sha256": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Sha256" },
+          "bytes": { "type": "integer", "minimum": 0 },
+          "classification": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/DataClassification" },
+          "encrypted": { "type": "boolean" }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "path": { "type": "string", "pattern": "^genes/" } }, "required": ["path"] },
+            "then": { "properties": { "entry_kind": { "const": "capability_gene" } } }
+          },
+          {
+            "if": { "properties": { "entry_kind": { "const": "capability_gene" } }, "required": ["entry_kind"] },
+            "then": { "properties": { "path": { "type": "string", "pattern": "^genes/" } } }
+          },
+          {
+            "if": { "properties": { "classification": { "enum": ["private", "restricted"] } }, "required": ["classification"] },
+            "then": { "properties": { "encrypted": { "const": true } } }
+          }
+        ]
+      }
+    },
+    "root_hash": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Sha256" },
+    "signature": { "type": "string", "minLength": 16 },
+    "key_envelopes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["recipient_id", "algorithm", "wrapped_key_ref"],
+        "properties": {
+          "recipient_id": { "type": "string", "minLength": 1 },
+          "algorithm": { "type": "string", "minLength": 1 },
+          "wrapped_key_ref": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

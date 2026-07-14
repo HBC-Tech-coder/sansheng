@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/model-call.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "call_id", "life_id", "core_id", "task_type", "model_ref", "budget", "status", "created_at"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "call_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "core_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/CoreId" },
+    "task_type": { "type": "string", "minLength": 1 },
+    "model_ref": { "type": "string", "pattern": "^[a-z0-9-]+:[A-Za-z0-9._-]+$" },
+    "fallback_chain": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9-]+:[A-Za-z0-9._-]+$" }, "uniqueItems": true },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_tokens", "max_cost_micros"],
+      "properties": {
+        "max_tokens": { "type": "integer", "minimum": 1 },
+        "max_cost_micros": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "status": { "enum": ["planned", "succeeded", "failed", "degraded"] },
+    "tokens_in": { "type": "integer", "minimum": 0 },
+    "tokens_out": { "type": "integer", "minimum": 0 },
+    "cost_micros": { "type": "integer", "minimum": 0 },
+    "latency_ms": { "type": "integer", "minimum": 0 },
+    "error_code": { "type": "string" },
+    "created_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" }
+  }
+}
+

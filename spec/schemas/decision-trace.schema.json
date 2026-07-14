@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/decision-trace.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "trace_id", "life_id", "route_level", "action", "lead_core", "supporters", "model_receipts", "action_risk", "trust_level", "intent_mode", "side_effect", "reason", "created_at"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "trace_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "route_level": { "anyOf": [{ "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/RouteLevel" }, { "type": "null" }] },
+    "action": { "enum": ["respond", "safe_pause"] },
+    "lead_core": { "anyOf": [{ "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/CoreId" }, { "const": "life-kernel" }] },
+    "supporters": { "type": "array", "uniqueItems": true, "items": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/CoreId" } },
+    "model_receipts": { "type": "array", "items": { "type": "string" } },
+    "action_risk": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/ActionRisk" },
+    "trust_level": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/TrustLevel" },
+    "intent_mode": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IntentMode" },
+    "side_effect": { "type": "boolean" },
+    "required_grant": { "type": "string" },
+    "reason": { "type": "string", "minLength": 1 },
+    "created_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "action": { "const": "safe_pause" } } },
+      "then": { "properties": { "route_level": { "type": "null" }, "side_effect": { "const": true } } },
+      "else": { "properties": { "route_level": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/RouteLevel" } } }
+    },
+    {
+      "if": { "properties": { "route_level": { "const": "L0" } }, "required": ["route_level"] },
+      "then": {
+        "properties": {
+          "action": { "const": "respond" },
+          "lead_core": { "const": "life-kernel" },
+          "supporters": { "type": "array", "maxItems": 0 },
+          "model_receipts": { "type": "array", "maxItems": 0 },
+          "side_effect": { "const": false }
+        }
+      }
+    }
+  ]
+}

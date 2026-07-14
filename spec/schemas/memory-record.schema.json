@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/memory-record.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "memory_id", "life_id", "owner_core", "truth_state", "content", "source_event_ids", "confidence", "scope", "retention", "data_classification", "authorized_cores", "created_at"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "memory_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "owner_core": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/CoreId" },
+    "truth_state": { "enum": ["observed", "stated", "reported", "inferred", "imagined", "disputed", "retracted"] },
+    "content": { "type": "string", "minLength": 1 },
+    "source_event_ids": { "type": "array", "minItems": 1, "items": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" }, "uniqueItems": true },
+    "evidence_hash": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Sha256" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "scope": { "type": "string", "minLength": 1 },
+    "retention": { "enum": ["hot", "warm", "cold", "tombstoned"] },
+    "data_classification": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/DataClassification" },
+    "consent_id": { "type": "string", "minLength": 1 },
+    "authorized_cores": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/CoreId" } },
+    "supersedes": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "model_version": { "type": "string", "minLength": 1 },
+    "created_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" },
+    "signature": { "type": "string", "minLength": 16 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "data_classification": { "enum": ["private", "restricted"] } },
+        "required": ["data_classification"]
+      },
+      "then": {
+        "properties": { "consent_id": { "type": "string", "minLength": 1 } },
+        "required": ["consent_id"]
+      }
+    }
+  ]
+}

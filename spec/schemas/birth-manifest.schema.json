@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/birth-manifest.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "birth_id", "parent_life_id", "child_life_id", "inherited_gene_ids", "excluded_domains", "budget", "consent_id", "sandbox_status", "created_at"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "birth_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "parent_life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "child_life_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "inherited_gene_ids": { "type": "array", "items": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" }, "uniqueItems": true },
+    "excluded_domains": {
+      "type": "array",
+      "minItems": 5,
+      "items": { "enum": ["private-memory", "accounts", "wallets", "device-permissions", "genome"] },
+      "uniqueItems": true,
+      "allOf": [
+        { "contains": { "const": "private-memory" } },
+        { "contains": { "const": "accounts" } },
+        { "contains": { "const": "wallets" } },
+        { "contains": { "const": "device-permissions" } },
+        { "contains": { "const": "genome" } }
+      ]
+    },
+    "budget": { "type": "object", "additionalProperties": false, "required": ["max_cost_micros", "max_runtime_seconds"], "properties": { "max_cost_micros": { "type": "integer", "minimum": 0 }, "max_runtime_seconds": { "type": "integer", "minimum": 1 } } },
+    "consent_id": { "type": "string", "minLength": 1 },
+    "sandbox_status": { "enum": ["embryo", "testing", "passed", "failed"] },
+    "created_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" }
+  }
+}

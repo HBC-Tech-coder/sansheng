@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/evolution-capsule.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "capsule_id", "source_life_id_hash", "evolution_level", "target", "diff", "sandbox_result", "privacy_scan", "data_classification", "signature", "rollback_point", "created_at"],
+  "properties": {
+    "schema_version": { "const": "0.1.0" },
+    "capsule_id": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Uuid" },
+    "source_life_id_hash": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/Sha256" },
+    "evolution_level": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/EvolutionLevel" },
+    "target": { "type": "string", "minLength": 1 },
+    "diff": { "type": "object" },
+    "sandbox_result": { "enum": ["passed", "failed"] },
+    "privacy_scan": { "const": "passed" },
+    "data_classification": { "const": "public" },
+    "signature": { "type": "string", "minLength": 16 },
+    "rollback_point": { "type": "string", "minLength": 1 },
+    "graylist": { "type": "array", "items": { "type": "string" } },
+    "created_at": { "$ref": "https://schemas.sansheng.local/v0.1/common-defs.schema.json#/$defs/IsoTimestamp" }
+  }
+}

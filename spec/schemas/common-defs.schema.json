@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.sansheng.local/v0.1/common-defs.schema.json",
+  "$defs": {
+    "Uuid": { "type": "string", "format": "uuid" },
+    "IsoTimestamp": { "type": "string", "format": "date-time" },
+    "Sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "CoreId": { "enum": ["self", "companion", "mentor"] },
+    "RouteLevel": { "enum": ["L0", "L1", "L2", "L3"] },
+    "TrustLevel": { "enum": ["T0", "T1", "T2", "T3", "T4", "T5"] },
+    "ActionRisk": { "enum": ["A0", "A1", "A2", "A3", "A4"] },
+    "EvolutionLevel": { "enum": ["E0", "E1", "E2", "E3", "E4"] },
+    "IntentMode": { "enum": ["discuss", "draft", "simulate", "act"] },
+    "DataClassification": { "enum": ["public", "internal", "private", "restricted"] },
+    "VectorClock": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    }
+  }
+}
+

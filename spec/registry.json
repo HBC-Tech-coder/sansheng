@@ -1,0 +1,22 @@
+{
+  "registry_version": "0.1.0",
+  "status": "frozen",
+  "naming": {
+    "route_level": "L0-L3",
+    "trust_level": "T0-T5",
+    "action_risk": "A0-A4",
+    "evolution_level": "E0-E4"
+  },
+  "contracts": [
+    { "contract_id": "life-identity", "version": "0.1.0", "schema": "schemas/life-identity.schema.json", "owner": "life-kernel", "compatibility": "backward-with-migration", "priority": "P0" },
+    { "contract_id": "life-event", "version": "0.1.0", "schema": "schemas/life-event.schema.json", "owner": "life-kernel", "compatibility": "append-only", "priority": "P0" },
+    { "contract_id": "memory-record", "version": "0.1.0", "schema": "schemas/memory-record.schema.json", "owner": "memory", "compatibility": "supersedes-chain", "priority": "P0" },
+    { "contract_id": "decision-trace", "version": "0.1.0", "schema": "schemas/decision-trace.schema.json", "owner": "core-router", "compatibility": "backward-with-migration", "priority": "P0" },
+    { "contract_id": "model-call", "version": "0.1.0", "schema": "schemas/model-call.schema.json", "owner": "model-gateway", "compatibility": "backward-with-migration", "priority": "P0" },
+    { "contract_id": "action-intent", "version": "0.1.0", "schema": "schemas/action-intent.schema.json", "owner": "action-gateway", "compatibility": "deny-on-unknown", "priority": "P0" },
+    { "contract_id": "lifepack-manifest", "version": "0.1.0", "schema": "schemas/lifepack-manifest.schema.json", "owner": "continuity", "compatibility": "reader-must-ignore-optional", "priority": "P0" },
+    { "contract_id": "sync-envelope", "version": "0.1.0", "schema": "schemas/sync-envelope.schema.json", "owner": "sync-merge", "compatibility": "append-only-events", "priority": "P0" },
+    { "contract_id": "evolution-capsule", "version": "0.1.0", "schema": "schemas/evolution-capsule.schema.json", "owner": "evolution-lab", "compatibility": "signed-and-revocable", "priority": "P1" },
+    { "contract_id": "birth-manifest", "version": "0.1.0", "schema": "schemas/birth-manifest.schema.json", "owner": "hatchery", "compatibility": "new-identity-only", "priority": "P1" }
+  ]
+}
